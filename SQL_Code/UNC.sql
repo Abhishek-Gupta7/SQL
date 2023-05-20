@@ -1,0 +1,105 @@
+-- USE store;
+USE invoicing;
+                           -- Using_Clause
+-- SELECT 
+-- 	p.date,
+--     c.name AS Client,
+--     p.amount,
+--     pm.name AS "Payment Mode"
+-- FROM payments p
+-- JOIN clients c
+-- 	USING(client_id)
+-- JOIN payment_methods pm
+-- ON p.payment_method = pm.payment_method_id
+-- ORDER BY p.date DESC;
+ 
+                             -- Using_Clause
+-- SELECT 
+-- 	o.order_id,
+--     c.first_name AS Customer,
+--     s.name AS Shipper
+-- FROM orders o
+-- JOIN customers c
+-- 	USING(customer_id)
+-- JOIN shippers s
+-- 	USING(shipper_id)
+-- ORDER BY o.order_id;
+
+
+                               -- Croos_Join
+-- Implicit
+-- SELECT 
+-- 	s.name AS Shipper,
+--     p.name AS Product
+-- FROM shippers s , products p
+-- ORDER BY Shipper;
+--  
+-- Explicit 
+-- SELECT 
+-- 	s.name AS Shipper,
+--     p.name AS product
+-- FROM shippers s
+-- CROSS JOIN Products p
+-- ORDER BY shipper;
+                           --  Natural_Join
+-- SELECT 
+-- 	o.order_id,
+--     c.first_name
+-- FROM orders o
+-- NATURAL JOIN customers c
+-- ORDER BY o.order_id; 
+
+-- USE sql_hr;
+-- SELECT 
+-- 	e.employee_id,
+--     e.first_name,
+--     m.first_name AS Manager
+-- FROM employees e
+-- LEFT JOIN employees m
+-- ON e.reports_to = m.employee_id;
+
+                           -- Union Clause 
+-- USE store;
+
+-- SELECT 
+-- 	customer_id,
+--     first_name,
+--     points,
+--     "Bronze" AS Type
+-- FROM customers
+-- WHERE points <= 2000
+-- UNION
+-- SELECT 
+-- 	customer_id,
+--     first_name,
+--     points,
+--     "Silver" AS Type
+-- FROM customers
+-- WHERE points > 2000 AND points < 3000
+-- UNION
+-- SELECT 
+-- 	customer_id,
+--     first_name,
+--     points,
+--     "Gold" AS Type
+-- FROM customers
+-- WHERE points BETWEEN 3000 AND 4000
+-- ORDER BY first_name;
+--  
+	
+
+-- SELECT 
+-- 	order_id,
+--     customer_id,
+--     order_date,
+--     "Active" AS Status
+-- FROM orders
+-- WHERE order_date >= "2019-01-01"
+-- UNION 
+-- SELECT 
+-- 	order_id,
+--     customer_id,
+--     order_date,
+--     "Archive" AS Status
+-- FROM orders
+-- WHERE order_date < "2019-01-01";
