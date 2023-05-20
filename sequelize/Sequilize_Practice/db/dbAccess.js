@@ -8,7 +8,7 @@ db.sequelize = sequelize;
 db.users = Users;
 
 db.sequelize.sync({alter:true})
-    .then((result) => {console.log("All Table Sync..")})
+    .then((result) => {console.log("All Table Sync..",)})
     .catch((error) => {console.log("Error with Sync :",error)})
 
 

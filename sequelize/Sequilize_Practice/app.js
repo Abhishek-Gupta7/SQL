@@ -1,6 +1,7 @@
 require('custom-env').env(true);
-// // require('./db/dbAccess');
+require('./db/dbAccess');
 const Users = require('./Model/users');
+// const Post = require('./Model/posts');
 // const path = require('path')
 const morgan = require('morgan');
 const express = require('express');

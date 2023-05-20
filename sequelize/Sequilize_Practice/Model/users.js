@@ -1,15 +1,19 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const  sequelize = require('../db/index');
 const Profile = require('./profile');
-const transaction = sequelize.transaction();
+const Posts = require('./posts');
+let t;
+sequelize.transaction()
+            .then((result) => {t = result})
+            .catch((error) => {console.log("Transaction Error : ",error.message);});
 
 class Users extends Model {
 
     static associations(){
-        this.hasOne(Model,{
-            foreignKey:'userId',
-            sourceKey: 'user_id',
-        })
+        // this.hasOne(Model,{
+        //     foreignKey:'userId',
+        //     sourceKey: 'user_id',
+        // })
     }
 }
 
@@ -75,49 +79,86 @@ class Users extends Model {
     });
 
 module.exports = Users;
+Users.hasMany(Posts,{
+    foreignKey:'user_id',
+    sourceKey:'user_id',
+    onDelete:'CASCADE'
+});
 Users.hasOne(Profile,{
     foreignKey:'userid',
     sourceKey: 'user_id',
+    onDelete: 'CASCADE'
 });
+Profile.belongsTo(Users,{
+    foreignKey:'userid',
+    sourceKey: 'user_id'
+})
+//        ******************* One to one ************
+// Users.sync({alter:true})
+//     .then(async() =>{
+//         // return await sequelize.query("select * from users where email = 'krisna12@gmail.com'")
+//         // return await sequelize.query("select * from users where email Like :email",
+//         // {replacements :{email:'kri%'}})
+//         // return await Users.create({
+//         //     firstName:'Rony',
+//         //     lastName:'Sundar',
+//         //     email:'rony1@gmail.com',
+//         //     age:45
+//         // });
+//         // return Users.destroy({where:{user_id:65},force:true});
+//         // return Users.findAll({
+//         //     attributes:{exclude:['createdAt','updatedAt']},
+//         //     paranoid:false,
+//         //     include:[{
+//         //         model:Profile,
+//         //         attributes:{exclude:['createdAt','userid','updatedAt']}
+//         //     }],
+//         //     where:{user_id:6}
+//         // });
+//         // return await sequelize.query("select * from users where user_id = :userid",{
+//         //     replacements:{userid:10}
+//         // });
+//         // return await Users.findOne({where:{user_id:6}});
+//     })
+//     // .then(async(data) => {
+//     //     let user = data;
+//     //     console.log(user);
+//     //     // user.getProfile()
+//     //     // .then((result) => {console.log("Profile : ",result);})
+//     //     // .catch((err) => {console.log(err);})
+//     // // return await user.createProfile({
+//     // //         bio:"I am actor",
+//     // //         description :"I do acting. "
+//     // //     });
+//     // })
+//     .then(async(result) =>{
+//         // console.log(result);
+//         // await t.commit();
+//     })
+//     .catch(async(error) => {
+//         console.log(`\n\nUser Error : ${error}\n\n`);
+//         // await t.rollback();
+// })
+// .catch((error) => {
+//     console.log("Transaction Error : ",error.message);
+// })
 
+
+//  ************  One to many ******************
 Users.sync({alter:true})
-    .then(async() =>{
-        // return await sequelize.query("select * from users where email = 'krisna12@gmail.com'")
-        // return await sequelize.query("select * from users where email Like :email",
-        // {replacements :{email:'kri%'}})
-        //  return await Users.create({
-        //     firstName:'John',
-        //     lastName:'jonny',
-        //     email:'john@gmail.com',
-        //     age:45
-        //  })
-        // return Users.destroy({where:{user_id:10}});
-        // return Users.findAll({
-        //     attributes:{exclude:['createdAt','updatedAt']},
-        //     paranoid:false,
-        //     include:[{
-        //         model:Profile,
-        //         attributes:{exclude:['createdAt','userid','updatedAt']}
-        //     }],
-        //     where:{user_id:6}
-        // });
-        // return await sequelize.query("select * from users where user_id = :userid",{
-        //     replacements:{userid:10}
-        // });
-        return await Users.findOne({where:{user_id:6}});
-    })
-    .then((data) => {
-        let user = data
-        user.getProfile()
-        .then((result) => {console.log("Profile : ",result);})
-        .catch((err) => {console.log(err);})
+    .then(async() => {
+        // let result = await Users.findOne({where:{user_id:33}});
+        // let count = await result.countPosts();
+        // console.log(count);
+        // let user = await Users.findOne({where:{user_id:33}});
+        // let result = await Posts.findOne({where:{user_id:33}});
+        // console.log(result);
+        // let remove = await user.removePosts(result);
+        // console.log(remove);  
     })
     .catch((error) => {
-        console.log(`\n\nUser Error : ${error.message}\n\n`);
-})
-
-
-
+        console.log(error.message);
+    })
 
 
 // registerUser => {user_id,username,age,dob,phone}

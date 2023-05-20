@@ -1,10 +1,6 @@
 const { Model, DataTypes, where } = require('sequelize');
 const zlib =  require('zlib');
 const sequelize = require('../db/index');
-const Users = require('./users');
-const { type } = require('os');
-const { Sequelize } = require('../db/dbAccess');
-
 
 class Profile extends Model{
 
@@ -29,14 +25,14 @@ Profile.init({
         type:DataTypes.STRING,
         allowNull:false
     },
-    discription : {
+    description : {
         type:DataTypes.STRING,
         set(value) {
             let compressedValue = zlib.deflateSync(value).toString('base64');
-            this.setDataValue('discription',compressedValue)
+            this.setDataValue('description',compressedValue)
         },
         get() {
-            let value = this.getDataValue('discription');
+            let value = this.getDataValue('description');
             let unCompressed = zlib.inflateSync(Buffer.from(value,'base64'));
             return unCompressed.toString();
         }
@@ -49,15 +45,16 @@ Profile.init({
     modelName:'profiles'
 });
 
+
 module.exports = Profile;
 
 Profile.sync({alter:true})
     .then(async() =>{
          //let result  = await sequelize.query("select * from profiles;",{type:sequelize.QueryTypes.SELECT});
         // console.log(result);
-        // let result = await Profile.create({
+        // return await Profile.create({
         //     bio:'I am dancer',
-        //     discription :'I love to dance',
+        //     description :'I love to dance',
         //     userid:6
         // });
         // // let profile = await Profile.findOne();
